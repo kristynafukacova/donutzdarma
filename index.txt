@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donut zdarma</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        h1 {
+            color: #FF6347;
+        }
+
+        p {
+            color: #333;
+        }
+
+        .code {
+            font-weight: bold;
+            color: #FF4500;
+        }
+
+        .button {
+            padding: 10px 20px;
+            background-color: #FF6347;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .button:hover {
+            background-color: #FF4500;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Poukaz na donut zdarma!</h1>
+    <h2>Gratis Donut-Gutschein </h2>
+    <p>Ukažte tento kód na pokladně</p>
+    <p>Zeigen Sie diesen Code an der Kasse vor</p>
+    <p class="code" id="discountCode">Načítání kódu...</p>
+
+</div>
+
+<script>
+    // Funkce pro získání dne v roce
+    function getCurrentDay() {
+        const startDate = new Date("2025-03-18"); // Nastavit počáteční datum
+        const currentDate = new Date();
+        const diffTime = Math.abs(currentDate - startDate); // Rozdíl mezi dneškem a začátkem
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)); // Počet dní od začátku
+        return diffDays;
+    }
+
+    // Funkce pro generování kódu
+    function generateCode() {
+        const currentDay = getCurrentDay(); // Získá aktuální den v roce
+        const day = currentDay % 2 === 0 ? 1 : 2; // Určí, zda je to první nebo druhý den
+        let currentCode = localStorage.getItem(`day${day}Code`) || 1; // Získá číslo kódu pro daný den
+        let nextCode = parseInt(currentCode) + 1; // Zvětší číslo kódu
+
+        // Pokud dosáhneme 150, resetujeme číslování
+        if (nextCode > 150) {
+            nextCode = 1;
+        }
+
+        // Uloží nové číslo do LocalStorage pro daný den
+        localStorage.setItem(`day${day}Code`, nextCode);
+
+        // Zobrazí nový kód
+        document.getElementById('discountCode').innerText = `Kód: DONUT-${nextCode}`;
+    }
+
+    // Při načtení stránky automaticky vygeneruje kód
+    window.onload = function() {
+        generateCode();
+    }
+</script>
+
+</body>
+</html>
